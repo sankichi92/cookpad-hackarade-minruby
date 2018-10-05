@@ -42,8 +42,10 @@ def evaluate(exp, env)
     #
     # Advice 1: Insert `pp(exp)` and observe the AST first.
     # Advice 2: Apply `evaluate` to each child of this node.
-    exp[1..-1].each do |stmt|
-      evaluate(stmt, env)
+    i = 1
+    while exp[i]
+      evaluate(exp[i], env)
+      i = i + 1
     end
 
   # The second argument of this method, `env`, is an "environment" that
@@ -154,7 +156,7 @@ def evaluate(exp, env)
     # All you need is store them into $function_definitions.
     #
     # Advice: $function_definitions[???] = ???
-    $function_definitions[exp[1]] = exp[2..3]
+    $function_definitions[exp[1]] = [exp[2], exp[3]]
 
 
 #
@@ -163,9 +165,13 @@ def evaluate(exp, env)
 
   # You don't need advices anymore, do you?
   when "ary_new"
-    exp[1..-1].map do |e|
-      evaluate(e, env)
+    arr = []
+    i = 1
+    while exp[i]
+      arr[i - 1] = evaluate(exp[i], env)
+      i = i + 1
     end
+    arr
 
   when "ary_ref"
     evaluate(exp[1], env)[evaluate(exp[2], env)]
@@ -174,9 +180,13 @@ def evaluate(exp, env)
     evaluate(exp[1], env)[evaluate(exp[2], env)] = evaluate(exp[3], env)
 
   when "hash_new"
-    exp[1..-1].each_slice(2).map do |key, val|
-      [evaluate(key, env), evaluate(val, env)]
-    end.to_h
+    hash = {}
+    i = 1
+    while exp[i]
+      hash[evaluate(exp[i], env)] = evaluate(exp[i + 1], env)
+      i = i + 2
+    end
+    hash
 
   else
     p("error")
