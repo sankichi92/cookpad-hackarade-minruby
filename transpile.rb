@@ -15,7 +15,7 @@ def evaluate(exp, env)
     exp[1] # return the immediate value as is
 
   when "+"
-    evaluate(exp[1], env) + evaluate(exp[2], env)
+    "#{evaluate(exp[1], env)}+#{evaluate(exp[2], env)}"
   when "-"
     evaluate(exp[1], env) - evaluate(exp[2], env)
   when "*"
@@ -106,7 +106,7 @@ def evaluate(exp, env)
       case exp[1]
       when "p"
         # MinRuby's `p` method is implemented by Ruby's `p` method.
-        p(evaluate(exp[2], env))
+        "console.log(#{evaluate(exp[2], env)})"
       when "Integer"
         Integer(evaluate(exp[2], env))
       when "fizzbuzz"
@@ -203,4 +203,5 @@ env = {}
 
 # `minruby_load()` == `File.read(ARGV.shift)`
 # `minruby_parse(str)` parses a program text given, and returns its AST
-evaluate(minruby_parse(minruby_load()), env)
+output = evaluate(minruby_parse(minruby_load()), env)
+puts output
