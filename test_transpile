@@ -3,7 +3,11 @@
 require 'minruby'
 require 'colorize'
 
+SKIP_FILES = %w[test1-4.rb test1-5.rb]
+
 Dir.glob('test*.rb').sort.each do |f|
+  next if SKIP_FILES.include?(f)
+
   correct = `ruby #{f}`
   js = `ruby transpile.rb #{f}`
   output = `node -e '#{js}'`
