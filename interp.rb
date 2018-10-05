@@ -128,7 +128,7 @@ def evaluate(exp, env)
       # a parameter list and an AST of function body.
       #
       # A function call evaluates the AST of function body within a new scope.
-      # You know, you cannot access a varible out of function.
+      # You know, you cannot access a variable out of function.
       # Therefore, you need to create a new environment, and evaluate the
       # function body under the environment.
       #
