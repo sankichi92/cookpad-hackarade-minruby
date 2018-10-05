@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'minruby'
+require 'colorize'
+
+COUNT = 2
+MY_PROGRAM = Array.new(COUNT) { 'interp.rb' }.join(' ')
+
+Dir.glob('test*.rb').sort.each do |f|
+  correct = `ruby interp.rb #{f}`
+  output = `ruby #{MY_PROGRAM} #{f}`
+
+  print "#{f} => "
+  if output == correct
+    puts 'OK!'.green
+  else
+    abort 'NG!'.red
+  end
+end
