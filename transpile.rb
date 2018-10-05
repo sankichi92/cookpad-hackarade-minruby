@@ -57,13 +57,13 @@ def evaluate(exp, env)
     # Variable reference: lookup the value corresponded to the variable
     #
     # Advice: env[???]
-    env[exp[1]]
+    exp[1].to_s
 
   when "var_assign"
     # Variable assignment: store (or overwrite) the value to the environment
     #
     # Advice: env[???] = ???
-    env[exp[1]] = evaluate(exp[2], env)
+    "#{exp[1]}=#{evaluate(exp[2], env)}"
 
 
 #
