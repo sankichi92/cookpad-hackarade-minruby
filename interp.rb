@@ -157,7 +157,13 @@ def evaluate(exp, env, function_definitions)
         new_env[exp[i][0]] = exp[i][1]
         i = i + 1
       end
-      new_env[args[0]] = evaluate(exp[2], env, function_definitions)
+
+      i = 0
+      while args[i]
+        new_env[args[i]] = evaluate(exp[i + 2], env, function_definitions)
+        i = i + 1
+      end
+
       evaluate(body, new_env, function_definitions)
     end
 
