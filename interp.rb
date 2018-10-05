@@ -28,6 +28,8 @@ def evaluate(exp, env)
     evaluate(exp[1], env) > evaluate(exp[2], env)
   when "<"
     evaluate(exp[1], env) < evaluate(exp[2], env)
+  when "=="
+    evaluate(exp[1], env) == evaluate(exp[2], env)
   # ... Implement other operators that you need
 
   
@@ -168,7 +170,7 @@ def evaluate(exp, env)
   else
     p("error")
     pp(exp)
-    raise("unknown node")
+    raise("unknown node: '#{exp[0]}'")
   end
 end
 
