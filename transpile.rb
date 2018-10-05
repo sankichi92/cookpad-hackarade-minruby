@@ -42,9 +42,11 @@ def evaluate(exp, env)
     #
     # Advice 1: Insert `pp(exp)` and observe the AST first.
     # Advice 2: Apply `evaluate` to each child of this node.
+    output = ''
     exp[1..-1].each do |stmt|
-      evaluate(stmt, env)
+      output += "#{evaluate(stmt, env)};\n"
     end
+    output
 
 # The second argument of this method, `env`, is an "environment" that
 # keeps track of the values stored to variables.
