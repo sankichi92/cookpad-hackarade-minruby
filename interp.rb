@@ -43,10 +43,12 @@ def evaluate(exp, env, function_definitions)
     # Advice 1: Insert `pp(exp)` and observe the AST first.
     # Advice 2: Apply `evaluate` to each child of this node.
     i = 1
+    last = nil
     while exp[i]
-      evaluate(exp[i], env, function_definitions)
+      last = evaluate(exp[i], env, function_definitions)
       i = i + 1
     end
+    last
 
   # The second argument of this method, `env`, is an "environment" that
   # keeps track of the values stored to variables.
