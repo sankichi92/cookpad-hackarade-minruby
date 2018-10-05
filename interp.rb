@@ -142,9 +142,8 @@ def evaluate(exp, env)
       # `def foo(a, b, c)`.
       args = $function_definitions[exp[1]][0]
       body = $function_definitions[exp[1]][1]
-      new_env = env.merge(
-        args[0] => evaluate(exp[2], env)
-      )
+      new_env = env.dup
+      new_env[args[0]] = evaluate(exp[2], env)
       evaluate(body, new_env)
     end
 
