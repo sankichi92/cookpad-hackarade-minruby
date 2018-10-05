@@ -26,6 +26,8 @@ def evaluate(exp, env)
     evaluate(exp[1], env) / evaluate(exp[2], env)
   when ">"
     evaluate(exp[1], env) > evaluate(exp[2], env)
+  when "<"
+    evaluate(exp[1], env) < evaluate(exp[2], env)
   # ... Implement other operators that you need
 
   
