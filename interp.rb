@@ -174,7 +174,9 @@ def evaluate(exp, env)
     evaluate(exp[1], env)[evaluate(exp[2], env)] = evaluate(exp[3], env)
 
   when "hash_new"
-    raise(NotImplementedError) # Problem 6
+    exp[1..-1].each_slice(2).map do |key, val|
+      [evaluate(key, env), evaluate(val, env)]
+    end.to_h
 
   else
     p("error")
