@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'minruby'
+require 'colorize'
+
+Dir.glob('test*.rb').sort.each do |f|
+  correct = `ruby #{f}`
+  js = `ruby transpile.rb #{f}`
+  output = `node -e '#{js}'`
+
+  print "#{f} => "
+  if output == correct
+    puts 'OK!'.green
+  else
+    puts 'NG!'.red
+    puts js
+    exit(1)
+  end
+end
