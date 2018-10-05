@@ -46,7 +46,7 @@ def evaluate(exp, env)
       end
     end
 
-  # The second argument of this method, `env`, is an "environement" that
+  # The second argument of this method, `env`, is an "environment" that
   # keeps track of the values stored to variables.
   # It is a Hash object whose key is a variable name and whose value is a
   # value stored to the corresponded variable.
