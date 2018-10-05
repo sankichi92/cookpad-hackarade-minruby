@@ -140,7 +140,8 @@ def evaluate(exp, env)
       # (*1) formal parameter: a variable as found in the function definition.
       # For example, `a`, `b`, and `c` are the formal parameters of
       # `def foo(a, b, c)`.
-      args, body = $function_definitions[exp[1]]
+      args = $function_definitions[exp[1]][0]
+      body = $function_definitions[exp[1]][1]
       new_env = env.merge(
         args[0] => evaluate(exp[2], env)
       )
