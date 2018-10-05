@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'minruby'
+require 'colorize'
+
+MY_PROGRAM = 'interp.rb'
+SKIP_FILES = %w[test4-4.rb]
+
+Dir.glob('test*.rb').sort.each do |f|
+  next if SKIP_FILES.include?(f)
+
+  correct = `ruby #{f}`
+  output = `ruby #{MY_PROGRAM} #{f}`
+
+  print "#{f} => "
+  if output == correct
+    puts 'OK!'.green
+  else
+    puts 'NG!'.red
+
+    out = StringIO.new
+    PP.pp(minruby_parse(File.read(f)), out)
+    out.rewind
+    puts out.read.yellow
+
+    exit(1)
+  end
+end

@@ -17,12 +17,19 @@ def evaluate(exp, env)
   when "+"
     evaluate(exp[1], env) + evaluate(exp[2], env)
   when "-"
-    # Subtraction.  Please fill in.
-    # Use the code above for addition as a reference.
-    # (Almost just copy-and-paste.  This is an exercise.)
-    raise(NotImplementedError) # Problem 1
+    evaluate(exp[1], env) - evaluate(exp[2], env)
   when "*"
-    raise(NotImplementedError) # Problem 1
+    evaluate(exp[1], env) * evaluate(exp[2], env)
+  when "%"
+    evaluate(exp[1], env) % evaluate(exp[2], env)
+  when "/"
+    evaluate(exp[1], env) / evaluate(exp[2], env)
+  when ">"
+    evaluate(exp[1], env) > evaluate(exp[2], env)
+  when "<"
+    evaluate(exp[1], env) < evaluate(exp[2], env)
+  when "=="
+    evaluate(exp[1], env) == evaluate(exp[2], env)
   # ... Implement other operators that you need
 
   
@@ -35,9 +42,11 @@ def evaluate(exp, env)
     #
     # Advice 1: Insert `pp(exp)` and observe the AST first.
     # Advice 2: Apply `evaluate` to each child of this node.
-    raise(NotImplementedError) # Problem 2
+    exp[1..-1].each do |stmt|
+      evaluate(stmt, env)
+    end
 
-  # The second argument of this method, `env`, is an "environement" that
+  # The second argument of this method, `env`, is an "environment" that
   # keeps track of the values stored to variables.
   # It is a Hash object whose key is a variable name and whose value is a
   # value stored to the corresponded variable.
@@ -46,13 +55,13 @@ def evaluate(exp, env)
     # Variable reference: lookup the value corresponded to the variable
     #
     # Advice: env[???]
-    raise(NotImplementedError) # Problem 2
+    env[exp[1]]
 
   when "var_assign"
     # Variable assignment: store (or overwrite) the value to the environment
     #
     # Advice: env[???] = ???
-    raise(NotImplementedError) # Problem 2
+    env[exp[1]] = evaluate(exp[2], env)
 
 
 #
@@ -69,11 +78,17 @@ def evaluate(exp, env)
     #   else
     #     ???
     #   end
-    raise(NotImplementedError) # Problem 3
+    if evaluate(exp[1], env)
+      evaluate(exp[2], env)
+    else
+      evaluate(exp[3], env)
+    end
 
   when "while"
     # Loop.
-    raise(NotImplementedError) # Problem 3
+    while evaluate(exp[1], env)
+      evaluate(exp[2], env)
+    end
 
 
 #
@@ -92,9 +107,12 @@ def evaluate(exp, env)
       when "p"
         # MinRuby's `p` method is implemented by Ruby's `p` method.
         p(evaluate(exp[2], env))
-      # ... Problem 4
+      when "Integer"
+        Integer(evaluate(exp[2], env))
+      when "fizzbuzz"
+        fizzbuzz(evaluate(exp[2], env))
       else
-        raise("unknown builtin function")
+        raise("unknown builtin function: '#{exp[1]}'")
       end
     else
 
@@ -110,7 +128,7 @@ def evaluate(exp, env)
       # a parameter list and an AST of function body.
       #
       # A function call evaluates the AST of function body within a new scope.
-      # You know, you cannot access a varible out of function.
+      # You know, you cannot access a variable out of function.
       # Therefore, you need to create a new environment, and evaluate the
       # function body under the environment.
       #
@@ -120,7 +138,11 @@ def evaluate(exp, env)
       # (*1) formal parameter: a variable as found in the function definition.
       # For example, `a`, `b`, and `c` are the formal parameters of
       # `def foo(a, b, c)`.
-      raise(NotImplementedError) # Problem 5
+      args, body = $function_definitions[exp[1]]
+      new_env = env.merge(
+        args[0] => evaluate(exp[2], env)
+      )
+      evaluate(body, new_env)
     end
 
   when "func_def"
@@ -132,7 +154,7 @@ def evaluate(exp, env)
     # All you need is store them into $function_definitions.
     #
     # Advice: $function_definitions[???] = ???
-    raise(NotImplementedError) # Problem 5
+    $function_definitions[exp[1]] = exp[2..3]
 
 
 #
@@ -141,24 +163,40 @@ def evaluate(exp, env)
 
   # You don't need advices anymore, do you?
   when "ary_new"
-    raise(NotImplementedError) # Problem 6
+    exp[1..-1].map do |e|
+      evaluate(e, env)
+    end
 
   when "ary_ref"
-    raise(NotImplementedError) # Problem 6
+    evaluate(exp[1], env)[evaluate(exp[2], env)]
 
   when "ary_assign"
-    raise(NotImplementedError) # Problem 6
+    evaluate(exp[1], env)[evaluate(exp[2], env)] = evaluate(exp[3], env)
 
   when "hash_new"
-    raise(NotImplementedError) # Problem 6
+    exp[1..-1].each_slice(2).map do |key, val|
+      [evaluate(key, env), evaluate(val, env)]
+    end.to_h
 
   else
     p("error")
     pp(exp)
-    raise("unknown node")
+    raise("unknown node: '#{exp[0]}'")
   end
 end
 
+def fizzbuzz(num)
+  case
+  when num % 15 == 0
+    'FizzBuzz'
+  when num % 3 == 0
+    'Fizz'
+  when num % 5 == 0
+    'Buzz'
+  else
+    num
+  end
+end
 
 $function_definitions = {}
 env = {}
