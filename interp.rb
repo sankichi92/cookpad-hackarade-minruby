@@ -101,7 +101,7 @@ def evaluate(exp, env, function_definitions)
     # Lookup the function definition by the given function name.
     func = function_definitions[exp[1]]
 
-    if func.nil?
+    if func == nil
       # We couldn't find a user-defined function definition;
       # it should be a builtin function.
       # Dispatch upon the given function name, and do paticular tasks.
@@ -148,7 +148,13 @@ def evaluate(exp, env, function_definitions)
       # `def foo(a, b, c)`.
       args = function_definitions[exp[1]][0]
       body = function_definitions[exp[1]][1]
-      new_env = env.dup
+
+      new_env = {}
+      i = 0
+      while exp[i]
+        new_env[exp[i][0]] = exp[i][1]
+        i = i + 1
+      end
       new_env[args[0]] = evaluate(exp[2], env, function_definitions)
       evaluate(body, new_env, function_definitions)
     end
