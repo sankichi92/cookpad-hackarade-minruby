@@ -109,6 +109,8 @@ def evaluate(exp, env)
         p(evaluate(exp[2], env))
       when "Integer"
         Integer(evaluate(exp[2], env))
+      when "fizzbuzz"
+        fizzbuzz(evaluate(exp[2], env))
       else
         raise("unknown builtin function: '#{exp[1]}'")
       end
@@ -175,6 +177,18 @@ def evaluate(exp, env)
   end
 end
 
+def fizzbuzz(num)
+  case
+  when num % 15 == 0
+    'FizzBuzz'
+  when num % 3 == 0
+    'Fizz'
+  when num % 5 == 0
+    'Buzz'
+  else
+    num
+  end
+end
 
 $function_definitions = {}
 env = {}
