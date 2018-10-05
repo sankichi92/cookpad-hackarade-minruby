@@ -196,12 +196,11 @@ def evaluate(exp, env)
 end
 
 def fizzbuzz(num)
-  case
-  when num % 15 == 0
+  if num % 15 == 0
     'FizzBuzz'
-  when num % 3 == 0
+  elsif num % 3 == 0
     'Fizz'
-  when num % 5 == 0
+  elsif num % 5 == 0
     'Buzz'
   else
     num
