@@ -37,13 +37,7 @@ def evaluate(exp, env)
     # Advice 1: Insert `pp(exp)` and observe the AST first.
     # Advice 2: Apply `evaluate` to each child of this node.
     exp[1..-1].each do |stmt|
-      case stmt[0]
-      when "func_call"
-        case stmt[1]
-        when "p"
-          p(evaluate(stmt[2], env))
-        end
-      end
+      evaluate(stmt, env)
     end
 
   # The second argument of this method, `env`, is an "environment" that
