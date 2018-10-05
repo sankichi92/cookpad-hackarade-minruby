@@ -113,6 +113,12 @@ def evaluate(exp, env, function_definitions)
         Integer(evaluate(exp[2], env, function_definitions))
       when "fizzbuzz"
         fizzbuzz(evaluate(exp[2], env, function_definitions))
+      when "require"
+        require(evaluate(exp[2], env, function_definitions))
+      when "minruby_parse"
+        minruby_parse(evaluate(exp[2], env, function_definitions))
+      when "minruby_load"
+        minruby_load()
       else
         raise("unknown builtin function: '#{exp[1]}'")
       end
